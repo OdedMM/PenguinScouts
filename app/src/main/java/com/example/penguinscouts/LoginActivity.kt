@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
             false
         })
 
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+        sign_in_button.setOnClickListener { attemptLogin() }
     }
 
     override fun onResume() {
@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
         username.error = null
         password.error = null
 
-        val emailStr = username.text.toString()
+        val usernameStr = username.text.toString()
         val passwordStr = password.text.toString()
 
         var cancel = false
@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
             cancel = true
         }
 
-        if (TextUtils.isEmpty(emailStr)) {
+        if (TextUtils.isEmpty(usernameStr)) {
             username.error = getString(R.string.error_field_required)
             focusView = username
             cancel = true
@@ -83,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
             focusView?.requestFocus()
         } else {
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr, passwordStr)
+            mAuthTask = UserLoginTask(usernameStr, passwordStr)
             mAuthTask!!.execute(null as Void?)
         }
     }
@@ -113,9 +113,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, JSONObject?>() {
+    inner class UserLoginTask internal constructor(private val mUsername: String, private val mPassword: String) : AsyncTask<Void, Void, JSONObject?>() {
         override fun doInBackground(vararg params: Void): JSONObject? {
-            val body = mapOf("username" to mEmail, "password" to mPassword)
+            val body = mapOf("username" to mUsername, "password" to mPassword)
             val res = post(Urls.login, body = body)
             return res?.jsonObject
         }
