@@ -13,11 +13,26 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
+                android:name=".ScouterFormActivity"
+                android:label="@string/title_activity_scouter_form"
+                android:windowSoftInputMode="adjustResize"
+                android:parentActivityName=".ScouterActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.example.penguinscouts.ScouterActivity"/>
+        </activity>
+        <activity
+                android:name=".ScouterActivity"
+                android:label="@string/title_activity_scouter"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
                 android:name=".LoginActivity"
                 android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>

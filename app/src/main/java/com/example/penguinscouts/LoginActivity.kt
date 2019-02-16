@@ -43,11 +43,19 @@ class LoginActivity : AppCompatActivity() {
                     if (res.has("error")) {
                         toast(res["message"].toString())
                     } else {
+                        var launchedNewActivity = true
+                        prefs.username = res["username"].toString()
                         when (res["type"] as Int) {
-                            0 -> toast("${res["username"]} scout")
-                            1 -> toast("${res["username"]}")
-                            2 -> toast("${res["username"]}")
+                            0 -> startActivity(ScouterIntent())
+                            1 -> toast("${res["username"]} manager")
+                            2 -> toast("${res["username"]} coach")
+                            3 -> toast("${res["username"]} admin")
+                            else -> {
+                                toast("${res["username"]} unknown user type")
+                                launchedNewActivity = false
+                            }
                         }
+                        if (launchedNewActivity) finish()
                     }
                 }
         }
@@ -58,10 +66,10 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        username.error = null
+        tv_username.error = null
         password.error = null
 
-        val usernameStr = username.text.toString()
+        val usernameStr = tv_username.text.toString()
         val passwordStr = password.text.toString()
 
         var cancel = false
@@ -74,8 +82,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         if (TextUtils.isEmpty(usernameStr)) {
-            username.error = getString(R.string.error_field_required)
-            focusView = username
+            tv_username.error = getString(R.string.error_field_required)
+            focusView = tv_username
             cancel = true
         }
 

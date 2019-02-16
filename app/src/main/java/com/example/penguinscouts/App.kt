@@ -37,11 +37,16 @@ class App : Application() {
 }
 
 class Prefs(context: Context) {
-    private val PREFS_FILENAME = "com.example.myapplication.prefs"
-    private val TOKEN = "token"
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
+    private val prefsFilename = "com.example.myapplication.prefs"
+    private val tokenKey = "token"
+    private val usernameKey = "username"
+    private val prefs: SharedPreferences = context.getSharedPreferences(prefsFilename, 0)
 
     var token: String?
-        get() = prefs.getString(TOKEN, "")
-        set(value) = prefs.edit().putString(TOKEN, value).apply()
+        get() = prefs.getString(tokenKey, "")
+        set(value) = prefs.edit().putString(tokenKey, value).apply()
+
+    var username: String?
+        get() = prefs.getString(usernameKey, "")
+        set(value) = prefs.edit().putString(usernameKey, value).apply()
 }
