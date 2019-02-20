@@ -13,11 +13,38 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
+                android:name=".MatchListActivity"
+                android:label="@string/title_activity_match_list"
+                android:parentActivityName=".ManagerActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.example.penguinscouts.ManagerActivity"/>
+        </activity>
+        <activity
+                android:name=".ManagerActivity"
+                android:label="@string/title_activity_manager"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".LoginRouteActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".CoachActivity"
+                android:label="@string/title_activity_coach"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
                 android:name=".ScouterFormActivity"
                 android:label="@string/title_activity_scouter_form"
-                android:windowSoftInputMode="adjustResize"
                 android:parentActivityName=".ScouterActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.example.penguinscouts.ScouterActivity"/>
@@ -30,12 +57,6 @@
         <activity
                 android:name=".LoginActivity"
                 android:label="@string/title_activity_login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

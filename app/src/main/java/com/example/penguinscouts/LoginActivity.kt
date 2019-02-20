@@ -2,6 +2,8 @@ package com.example.penguinscouts
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,10 +12,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import org.json.JSONObject
+
+fun Context.LoginIntent() : Intent {
+    return Intent(this, LoginActivity::class.java)
+}
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,33 +35,6 @@ class LoginActivity : AppCompatActivity() {
         })
 
         sign_in_button.setOnClickListener { attemptLogin() }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        doAsync {
-            val res = get(Urls.authenticate)?.jsonObject
-            if (res != null)
-                uiThread {
-                    if (res.has("error")) {
-                        toast(res["message"].toString())
-                    } else {
-                        var launchedNewActivity = true
-                        prefs.username = res["username"].toString()
-                        when (res["type"] as Int) {
-                            0 -> startActivity(ScouterIntent())
-                            1 -> toast("${res["username"]} manager")
-                            2 -> toast("${res["username"]} coach")
-                            3 -> toast("${res["username"]} admin")
-                            else -> {
-                                toast("${res["username"]} unknown user type")
-                                launchedNewActivity = false
-                            }
-                        }
-                        if (launchedNewActivity) finish()
-                    }
-                }
-        }
     }
 
     private fun attemptLogin() {
