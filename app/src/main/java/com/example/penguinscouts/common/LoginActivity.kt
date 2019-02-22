@@ -1,4 +1,4 @@
-package com.example.penguinscouts
+package com.example.penguinscouts.common
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.example.penguinscouts.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 
@@ -94,7 +95,6 @@ class LoginActivity : AppCompatActivity() {
                     login_progress.visibility = if (show) View.VISIBLE else View.GONE
                 }
             })
-
     }
 
     inner class UserLoginTask internal constructor(private val mUsername: String, private val mPassword: String) : AsyncTask<Void, Void, JSONObject?>() {
@@ -110,7 +110,8 @@ class LoginActivity : AppCompatActivity() {
 
             if (result != null && result["success"] as Boolean) {
                 prefs.token = result["token"].toString()
-                onResume()
+                startActivity(LoginRouteIntent())
+                finish()
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()

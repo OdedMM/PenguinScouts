@@ -16,4 +16,6 @@
     <string name="title_activity_coach">CoachActivity</string>
     <string name="title_activity_manager">ManagerActivity</string>
     <string name="title_activity_match_list">MatchListActivity</string>
+    <string name="title_activity_add_match">AddMatchActivity</string>
+    <string name="title_activity_admin">AdminActivity</string>
 </resources>

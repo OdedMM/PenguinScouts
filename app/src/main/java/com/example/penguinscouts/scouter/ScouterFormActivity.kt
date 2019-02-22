@@ -1,16 +1,17 @@
-package com.example.penguinscouts
+package com.example.penguinscouts.scouter
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import com.example.penguinscouts.R
 
 import kotlinx.android.synthetic.main.activity_scouter_form.*
 
 fun Context.ScouterFormIntent(gameId : Int): Intent {
     return Intent(this, ScouterFormActivity::class.java).apply {
-        putExtra(INTENT_GAME_ID , gameId)
+        putExtra(INTENT_GAME_ID, gameId)
     }
 }
 
