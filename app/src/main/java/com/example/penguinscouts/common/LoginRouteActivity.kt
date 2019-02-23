@@ -73,8 +73,10 @@ class LoginRouteActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.logout) {
-            post(Urls.logout)
-            prefs.logout()
+            doAsync {
+                post(Urls.logout)
+                prefs.logout()
+            }
             startActivity(LoginRouteIntent())
             finish()
             return true

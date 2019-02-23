@@ -7,13 +7,17 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_scouter.*
-import kotlinx.android.synthetic.main.content_scouter.*
-import kotlinx.android.synthetic.main.scout_game_list_item.view.*
-import org.jetbrains.anko.sdk27.coroutines.onClick
 import android.view.*
 import com.example.penguinscouts.*
 import com.example.penguinscouts.common.LoginRouteIntent
+import com.example.penguinscouts.manager.MatchListActivity
+import kotlinx.android.synthetic.main.activity_scouter.*
+import kotlinx.android.synthetic.main.content_scouter.*
+import kotlinx.android.synthetic.main.scout_game_list_item.view.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.uiThread
+import org.json.JSONArray
 
 
 fun Context.ScouterIntent(): Intent {
@@ -35,13 +39,13 @@ class ScouterActivity : AppCompatActivity() {
         tv_username.text = prefs.username
 
         rv_list.layoutManager = LinearLayoutManager(this)
-
-        val gamelist = arrayListOf(
-            Match(1, "rrr1", "rrr2", "rrr3", "bbb1", "bbb2", "bbb3"),
-            Match(1, "r2rr1", "r123rr2", "rrr3", "b1", "bbb2", "2b3"),
-            Match(1, "rr21r1", "rr132r2", "rr11r3", "b32b1", "bbb2", "113")
-        )
-        rv_list.adapter = ScouterGameListAdapter(gamelist, this)
+        doAsync {
+            val gamelist = get(Urls.match)?.jsonArray
+            uiThread {
+                rv_list.adapter =
+                    MatchListActivity.ScouterGameListAdapter(gamelist ?: JSONArray(), this@ScouterActivity)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,8 +56,10 @@ class ScouterActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.logout) {
-            post(Urls.logout)
-            prefs.logout()
+            doAsync {
+                post(Urls.logout)
+                prefs.logout()
+            }
             startActivity(LoginRouteIntent())
             finish()
             return true
@@ -61,7 +67,8 @@ class ScouterActivity : AppCompatActivity() {
         return false
     }
 
-    class ScouterGameListAdapter(val items: ArrayList<Match>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+    class ScouterGameListAdapter(val items: ArrayList<Match>, val context: Context) :
+        RecyclerView.Adapter<ViewHolder>() {
         override fun getItemCount(): Int {
             return items.size
         }

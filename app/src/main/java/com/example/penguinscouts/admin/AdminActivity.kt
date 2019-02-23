@@ -7,12 +7,15 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.example.penguinscouts.*
+import com.example.penguinscouts.R
+import com.example.penguinscouts.Urls
 import com.example.penguinscouts.common.LoginRouteIntent
-
+import com.example.penguinscouts.post
+import com.example.penguinscouts.prefs
 import kotlinx.android.synthetic.main.activity_admin.*
+import org.jetbrains.anko.doAsync
 
-fun Context.AdminIntent() : Intent {
+fun Context.AdminIntent(): Intent {
     return Intent(this, AdminActivity::class.java)
 }
 
@@ -37,8 +40,10 @@ class AdminActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.logout) {
-            post(Urls.logout)
-            prefs.logout()
+            doAsync {
+                post(Urls.logout)
+                prefs.logout()
+            }
             startActivity(LoginRouteIntent())
             finish()
             return true
