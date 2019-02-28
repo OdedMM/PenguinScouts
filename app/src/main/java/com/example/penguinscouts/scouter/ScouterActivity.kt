@@ -4,17 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.example.penguinscouts.*
 import com.example.penguinscouts.common.LoginRouteIntent
-import com.example.penguinscouts.manager.MatchListActivity
 import kotlinx.android.synthetic.main.activity_scouter.*
 import kotlinx.android.synthetic.main.content_scouter.*
 import kotlinx.android.synthetic.main.scout_game_list_item.view.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.image
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
@@ -43,7 +45,7 @@ class ScouterActivity : AppCompatActivity() {
             val gamelist = get(Urls.match)?.jsonArray
             uiThread {
                 rv_list.adapter =
-                    MatchListActivity.ScouterGameListAdapter(gamelist ?: JSONArray(), this@ScouterActivity)
+                    ScouterGameListAdapter(gamelist ?: JSONArray(), this@ScouterActivity)
             }
         }
     }
@@ -67,10 +69,10 @@ class ScouterActivity : AppCompatActivity() {
         return false
     }
 
-    class ScouterGameListAdapter(val items: ArrayList<Match>, val context: Context) :
+    class ScouterGameListAdapter(val items: JSONArray, val context: Context) :
         RecyclerView.Adapter<ViewHolder>() {
         override fun getItemCount(): Int {
-            return items.size
+            return items.length()
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -84,14 +86,22 @@ class ScouterActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.gameNumber.text = items[position].gameNumber.toString()
-            holder.root.onClick { context.startActivity(context.ScouterFormIntent(items[position].gameNumber)) }
-            holder.red1.text = items[position].red1
-            holder.red2.text = items[position].red2
-            holder.red3.text = items[position].red3
-            holder.blue1.text = items[position].blue1
-            holder.blue2.text = items[position].blue2
-            holder.blue3.text = items[position].blue3
+            holder.gameNumber.text = items.getJSONObject(position).getInt("id").toString()
+            holder.root.onClick { context.startActivity(context.ScouterFormIntent(items.getJSONObject(position).getInt("id"))) }
+            holder.red1.text = items.getJSONObject(position).getString("red1")
+            holder.red2.text = items.getJSONObject(position).getString("red2")
+            holder.red3.text = items.getJSONObject(position).getString("red3")
+            holder.blue1.text = items.getJSONObject(position).getString("blue1")
+            holder.blue2.text = items.getJSONObject(position).getString("blue2")
+            holder.blue3.text = items.getJSONObject(position).getString("blue3")
+            holder.button.image = ContextCompat.getDrawable(context, R.drawable.ic_delete_black_24dp)
+            holder.button.setOnClickListener {
+                Toast.makeText(
+                    context,
+                    "Todo delete match ${items.getJSONObject(position).getInt("id")}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -104,6 +114,7 @@ class ScouterActivity : AppCompatActivity() {
         val blue1 = view.blue1!!
         val blue2 = view.blue2!!
         val blue3 = view.blue3!!
+        val button = view.button!!
     }
 
 }
